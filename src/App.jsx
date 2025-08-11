@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import "./App.css";
 import Navbar from "./Navbar";
+import Table from "./Table";
 
 function App() {
   useEffect(() => {
@@ -117,8 +118,9 @@ function App() {
 
   return (
     <>
-      <div className="flex">
+      <div className="flex flex-col items-center justify-center w-full">
         <Navbar />
+        <Table />
       </div>
     </>
   );
