@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import "./App.css";
 import Navbar from "./Navbar";
 import Table from "./Table";
+import Modal from "./Modal";
 
 function App() {
   useEffect(() => {
@@ -116,11 +117,25 @@ function App() {
     // deleteData()
   }
 
+  const [showCreateModal, setShowCreateModal] = useState(true);
+
   return (
     <>
       <div className="flex flex-col items-center justify-center w-full">
         <Navbar />
         <Table />
+        <Modal
+          show={showCreateModal}
+          onClose={() => setShowCreateModal(false)}
+          heading="Create New Product"
+        >
+          {" "}
+          <input
+            type="text"
+            placeholder="Product Name"
+            className="w-full px-4 py-2 border rounded-md"
+          />
+        </Modal>
       </div>
     </>
   );

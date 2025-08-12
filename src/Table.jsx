@@ -30,7 +30,7 @@ const ProductTable = () => {
       status: "Pending",
     },
     {
-      id: 3,
+      id: 4,
       name: "Reginald Men Sunscreen SPF",
       amazonLink:
         "https://www.amazon.in/dp/B0DT49ZWR5?ref=ppx_yo2ov_dt_b_fed_asin_title",
@@ -39,7 +39,7 @@ const ProductTable = () => {
       status: "Done",
     },
     {
-      id: 3,
+      id: 5,
       name: "Mantra Herbal De-Tan Scrub",
       amazonLink:
         "https://www.amazon.in/dp/B0B77C24NH?ref=ppx_yo2ov_dt_b_fed_asin_title&th=1",
@@ -48,7 +48,7 @@ const ProductTable = () => {
       status: "Pending",
     },
     {
-      id: 3,
+      id: 6,
       name: "Simpl Living Nylon Fabric Belt",
       amazonLink:
         "https://www.amazon.in/dp/B0DXFJ9JMQ?ref=ppx_yo2ov_dt_b_fed_asin_title&th=1&psc=1",
