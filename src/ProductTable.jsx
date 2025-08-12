@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const ProductTable = () => {
+const ProductTable = (props) => {
   const [products, setProducts] = useState([
     {
       id: 1,
@@ -101,6 +101,7 @@ const ProductTable = () => {
                 </td>
                 <td className="px-4 py-2">{p.quantity}</td>
                 <td className="px-4 py-2">{p.date}</td>
+
                 <td className="px-4 py-2">
                   <button
                     onClick={() => statusBtn(p.id)}
@@ -111,9 +112,10 @@ const ProductTable = () => {
                     {p.status}
                   </button>
                 </td>
-                <td className="px-4 py-2 flex gap-2">
+
+                <td className="px-4 py-2 flex gap-2 items-center justify-center">
                   <button
-                    onClick={() => handleEdit(p.id)}
+                    onClick={() => props.onEditClick()}
                     className="px-3 py-1 bg-yellow-400 text-white rounded hover:bg-yellow-500"
                   >
                     Edit
@@ -123,6 +125,12 @@ const ProductTable = () => {
                     className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
                   >
                     Delete
+                  </button>
+                  <button
+                    onClick={() => props.onNotesClick()}
+                    className="px-3 py-1 text-white rounded bg-blue-600 hover:bg-blue-700"
+                  >
+                    Notes
                   </button>
                 </td>
               </tr>

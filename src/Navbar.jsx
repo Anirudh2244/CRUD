@@ -1,7 +1,7 @@
 import React from "react";
 import NewProductModal from "./Modal";
 
-export default function () {
+export default function (props) {
   return (
     <nav className="flex items-center justify-between w-full shadow-md gap-4 px-4 py-2">
       {/* Logo Section */}
@@ -18,7 +18,10 @@ export default function () {
         </div>
 
         {/* New Button */}
-        <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md">
+        <button
+          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md"
+          onClick={props.onNewClick}
+        >
           New
         </button>
       </div>
