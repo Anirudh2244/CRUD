@@ -3,19 +3,46 @@ import "./App.css";
 import Navbar from "./Navbar";
 import ProductTable from "./ProductTable";
 import Modal from "./Modal";
+import ProductForm from "./ProductForm";
 
 function App() {
-  useEffect(() => {
-    main();
-  }, []);
-
-  function main() {
-    console.log("hiiiiiii");
-  }
-
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showNotesModal, setShowNotesModal] = useState(false);
-  const [showEditModal, setShowEditModal] = useState(true);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [createData, setCreateData] = useState({
+    productName: "",
+    productLink: "",
+    productQuantity: 1,
+    orderStatus: "Pending",
+  });
+  const [updateProduct, setUpdateProduct] = useState({});
+  const [createPromise, setCreatePromise] = useState({
+    pending: false,
+    data: null,
+    error: false,
+  });
+
+  function createNewProduct() {
+    setCreatePromise({ pending: true, data: null, error: false });
+
+    fetch("http://localhost:3000/products", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(createData),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("New product created:", data);
+        setShowCreateModal(false);
+        setCreatePromise({ pending: false, data: data, error: false });
+      })
+      .catch((err) => {
+        console.error("Error creating product:", err);
+        setCreatePromise({ pending: false, data: null, error: err });
+      });
+  }
 
   return (
     <>
@@ -30,12 +57,15 @@ function App() {
           show={showCreateModal}
           onClose={() => setShowCreateModal(false)}
           heading="Create New Product"
+          onSubmitClick={createNewProduct}
         >
-          <input
-            type="text"
-            placeholder="Product Name"
-            className="w-full px-4 py-2 border rounded-md"
-          ></input>
+          <ProductForm
+            value={createData}
+            onChange={(obj) => {
+            setCreateData(obj);
+            }}
+          />
+          
         </Modal>
 
         <Modal
@@ -43,11 +73,7 @@ function App() {
           onClose={() => setShowEditModal(false)}
           heading="Update the Product"
         >
-          <input
-            type="text"
-            placeholder="Product Name"
-            className="w-full px-4 py-2 border rounded-md"
-          ></input>
+          <ProductForm />
         </Modal>
 
         <Modal
