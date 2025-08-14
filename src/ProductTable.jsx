@@ -6,7 +6,7 @@ const ProductTable = (props) => {
       id: 1,
       name: "SOLARA Blendkwik Portable Blender",
       amazonLink:
-        "https://www.amazon.in/dp/B0D1MZ7Z5W?ref=ppx_yo2ov_dt_b_fed_asin_title&th=1",
+      "https://www.amazon.in/dp/B0D1MZ7Z5W?ref=ppx_yo2ov_dt_b_fed_asin_title&th=1",
       quantity: 2,
       date: "2025-08-10",
       status: "Done",

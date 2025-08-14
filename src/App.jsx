@@ -4,6 +4,7 @@ import Navbar from "./Navbar";
 import ProductTable from "./ProductTable";
 import Modal from "./Modal";
 import ProductForm from "./ProductForm";
+import { ClipLoader } from "react-spinners";
 
 function App() {
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -16,13 +17,38 @@ function App() {
     orderStatus: "Pending",
   });
   const [updateProduct, setUpdateProduct] = useState({});
+
   const [createPromise, setCreatePromise] = useState({
     pending: false,
     data: null,
     error: false,
   });
 
-  // const [products, setProducts] = useState([]);
+  const [productsPromise, setProductPromise] = useState({
+    pending: false,
+    data: null,
+    error: false,
+  });
+
+  useEffect(() => {
+    getProducts();
+  }, []);
+
+  function getProducts() {
+    setProductPromise({ pending: true, data: null, error: false });
+
+    fetch("http://localhost:3000/products")
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("Product data reeceived:", data);
+        setShowCreateModal(false);
+        setProductPromise({ data });
+      })
+      .catch((err) => {
+        console.error("Error creating product:", err);
+        setProductPromise({ pending: false, data: null, error: err });
+      });
+  }
 
   function createNewProduct() {
     setCreatePromise({ pending: true, data: null, error: false });
@@ -78,8 +104,15 @@ function App() {
               onClick={createNewProduct}
               className="px-4 py-2 bg-gray-300 rounded hover:bg-blue-600"
             >
-              Submit
+              {createPromise.pending ? (
+                <ClipLoader color={"blue"} size={20} />
+              ) : (
+                "Submit"
+              )}
             </button>
+            {createPromise.error ? (
+              <p className="error">Soemthing went wrong .. </p>
+            ) : null}
           </div>
         </Modal>
 
@@ -89,6 +122,7 @@ function App() {
           heading="Update the Product"
         >
           <ProductForm />
+
           <div className="flex justify-end mt-6 gap-2">
             <button
               onClick={() => setShowCreateModal(false)}
