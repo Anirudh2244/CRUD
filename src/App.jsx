@@ -22,6 +22,8 @@ function App() {
     error: false,
   });
 
+  // const [products, setProducts] = useState([]);
+
   function createNewProduct() {
     setCreatePromise({ pending: true, data: null, error: false });
 
@@ -57,15 +59,28 @@ function App() {
           show={showCreateModal}
           onClose={() => setShowCreateModal(false)}
           heading="Create New Product"
-          onSubmitClick={createNewProduct}
         >
           <ProductForm
             value={createData}
             onChange={(obj) => {
-            setCreateData(obj);
+              setCreateData(obj);
             }}
           />
-          
+          {createPromise.pending && <span>Loading...</span>}
+          <div className="flex justify-end mt-6 gap-2">
+            <button
+              onClick={() => setShowCreateModal(false)}
+              className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+            >
+              Close
+            </button>
+            <button
+              onClick={createNewProduct}
+              className="px-4 py-2 bg-gray-300 rounded hover:bg-blue-600"
+            >
+              Submit
+            </button>
+          </div>
         </Modal>
 
         <Modal
@@ -74,6 +89,20 @@ function App() {
           heading="Update the Product"
         >
           <ProductForm />
+          <div className="flex justify-end mt-6 gap-2">
+            <button
+              onClick={() => setShowCreateModal(false)}
+              className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+            >
+              Close
+            </button>
+            <button
+              onClick={updateProduct}
+              className="px-4 py-2 bg-gray-300 rounded hover:bg-blue-600"
+            >
+              Submit
+            </button>
+          </div>
         </Modal>
 
         <Modal
@@ -86,6 +115,20 @@ function App() {
             placeholder="write additional infromation related to orders"
             className="w-full px-4 py-2 border rounded-md"
           ></textarea>
+          <div className="flex justify-end mt-6 gap-2">
+            <button
+              onClick={() => setShowCreateModal(false)}
+              className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+            >
+              Close
+            </button>
+            <button
+              onClick={createNewProduct}
+              className="px-4 py-2 bg-gray-300 rounded hover:bg-blue-600"
+            >
+              Submit
+            </button>
+          </div>
         </Modal>
       </div>
     </>
