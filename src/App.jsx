@@ -14,6 +14,7 @@ function App() {
     productName: "",
     productLink: "",
     productQuantity: 1,
+    productDate: new Date().toISOString().split("T")[0],
     orderStatus: "Pending",
   });
   const [updateProduct, setUpdateProduct] = useState({});
@@ -29,6 +30,8 @@ function App() {
     data: null,
     error: false,
   });
+
+  // GET API CALL TO FETCH THE PRODUCT DATA
 
   useEffect(() => {
     getProducts();
@@ -50,6 +53,8 @@ function App() {
       });
   }
 
+  // POST API CALL TO CREATE NEW PRODUCT
+
   function createNewProduct() {
     setCreatePromise({ pending: true, data: null, error: false });
 
@@ -65,6 +70,7 @@ function App() {
         console.log("New product created:", data);
         setShowCreateModal(false);
         setCreatePromise({ pending: false, data: data, error: false });
+        getProducts();
       })
       .catch((err) => {
         console.error("Error creating product:", err);
@@ -75,12 +81,15 @@ function App() {
   return (
     <>
       <div className="flex flex-col items-center justify-center w-full">
+        {/* NAVBAR */}
         <Navbar onNewClick={() => setShowCreateModal(true)} />
         <ProductTable
           onNotesClick={() => setShowNotesModal(true)}
           onEditClick={() => setShowEditModal(true)}
+          products={productsPromise?.data || []}
         />
 
+        {/* NEW PRODUCT MODAL AND FORM */}
         <Modal
           show={showCreateModal}
           onClose={() => setShowCreateModal(false)}
@@ -101,7 +110,10 @@ function App() {
               Close
             </button>
             <button
-              onClick={createNewProduct}
+              onClick={() => {
+                createNewProduct();
+                getProducts();
+              }}
               className="px-4 py-2 bg-gray-300 rounded hover:bg-blue-600"
             >
               {createPromise.pending ? (
@@ -116,6 +128,7 @@ function App() {
           </div>
         </Modal>
 
+        {/* EDIT/ UPDATE PRODUCT MODAL AND FORM */}
         <Modal
           show={showEditModal}
           onClose={() => setShowEditModal(false)}
@@ -139,6 +152,7 @@ function App() {
           </div>
         </Modal>
 
+        {/* ADDITIONAL NOTES MODAL */}
         <Modal
           show={showNotesModal}
           onClose={() => setShowNotesModal(false)}

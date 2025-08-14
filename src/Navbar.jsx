@@ -3,7 +3,7 @@ import NewProductModal from "./Modal";
 
 export default function (props) {
   return (
-    <nav className="flex items-center justify-between w-full shadow-md gap-4 px-4 py-2">
+    <nav className="flex items-center justify-between w-full shadow-md gap-4 px-4 py-2 fixed top-0 left-0 w-full bg-white shadow z-50">
       {/* Logo Section */}
       <div className="text-l sm:text-2xl font-bold px-4 py-2">ZorShour</div>
 

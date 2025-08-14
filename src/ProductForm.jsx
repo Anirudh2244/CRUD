@@ -13,6 +13,9 @@ function ProductForm(props) {
   const [orderStatus, setOrderStatus] = useState(
     props.value?.productStatus || "Pending"
   );
+  const [productDate, setProductDate] = useState(
+    props.value?.productDate || ""
+  );
 
   useEffect(() => {
     if (props.onChange) {
@@ -20,6 +23,7 @@ function ProductForm(props) {
         productName,
         productLink,
         productQuantity,
+        productDate,
         orderStatus,
       });
     }
@@ -66,8 +70,8 @@ function ProductForm(props) {
           <label className="text-sm">Date</label>
           <input
             type="date"
-            value={new Date().toISOString().split("T")[0]}
-            readonly
+            value={productDate}
+            onChange={(e) => setProductDate(e.target.value)}
             className="w-full px-4 py-2 border rounded-md bg-gray-100 cursor-not-allowed"
           />
         </div>
@@ -83,7 +87,6 @@ function ProductForm(props) {
             <option value="Done">Done</option>
           </select>
         </div>
-        
       </div>
     </div>
   );
