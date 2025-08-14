@@ -55,22 +55,6 @@
       "productLink": "last entry",
       "productQuantity": "10000",
       "orderStatus": "Done"
-    },
-    {
-      "id": "2350",
-      "productName": "xdjbjbnx",
-      "productLink": "dsfbsbfgb",
-      "productQuantity": 1,
-      "productDate": "2025-08-14",
-      "orderStatus": "Done"
-    },
-    {
-      "id": "9419",
-      "productName": "hi there ",
-      "productLink": "testing ",
-      "productQuantity": "100",
-      "productDate": "2025-08-15",
-      "orderStatus": "Done"
     }
   ]
 }

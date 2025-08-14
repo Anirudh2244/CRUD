@@ -78,6 +78,20 @@ function App() {
       });
   }
 
+  // DELETE FUNCTION
+
+  function deleteProduct(id) {
+    fetch(`http://localhost:3000/products/${id}`, {
+      method: "DELETE",
+    })
+      .then((res) => {
+        getProducts(); // refresh table after deletion
+      })
+      .catch((err) => {
+        console.error("Error deleting product:", err);
+      });
+  }
+
   return (
     <>
       <div className="flex flex-col items-center justify-center w-full">
@@ -86,6 +100,7 @@ function App() {
         <ProductTable
           onNotesClick={() => setShowNotesModal(true)}
           onEditClick={() => setShowEditModal(true)}
+          onDeleteClick={deleteProduct}
           products={productsPromise?.data || []}
         />
 
