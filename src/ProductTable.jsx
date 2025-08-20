@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { BarLoader } from "react-spinners";
 
 const ProductTable = (props) => {
   // const [products, setProducts] = useState([]);
@@ -16,7 +17,7 @@ const ProductTable = (props) => {
   };
 
   return (
-    <div className="w-4/5 mt-24">
+    <div className="w-4/5">
       <div className="overflow-x-auto">
         <table className="min-w-full border border-gray-200 rounded-lg">
           <thead className="bg-gray-100">
@@ -59,12 +60,14 @@ const ProductTable = (props) => {
                 </td>
 
                 <td className="px-4 py-2 flex gap-2 items-center justify-center">
+                  
                   <button
-                    onClick={() => props.onEditClick()}
+                    onClick={() => props.onEditClick(p)}
                     className="px-3 py-1 bg-yellow-400 text-white rounded hover:bg-yellow-500"
                   >
                     Edit
                   </button>
+
                   <button
                     onClick={() => {
                       if (

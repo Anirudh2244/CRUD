@@ -4,29 +4,31 @@ import Navbar from "./Navbar";
 import ProductTable from "./ProductTable";
 import Modal from "./Modal";
 import ProductForm from "./ProductForm";
-import { ClipLoader } from "react-spinners";
+import { BarLoader, ClipLoader } from "react-spinners";
 
 function App() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showNotesModal, setShowNotesModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [createData, setCreateData] = useState({
     productName: "",
     productLink: "",
     productQuantity: 1,
     productDate: new Date().toISOString().split("T")[0],
-    orderStatus: "Pending",
+    orderStatus: "loading",
   });
-  const [updateProduct, setUpdateProduct] = useState({});
+
+  const [activeProduct, setactiveProduct] = useState({});
 
   const [createPromise, setCreatePromise] = useState({
-    pending: false,
+    loading: false,
     data: null,
     error: false,
   });
 
-  const [productsPromise, setProductPromise] = useState({
-    pending: false,
+  const [productsPromise, setProductsPromise] = useState({
+    loading: false,
     data: null,
     error: false,
   });
@@ -38,25 +40,29 @@ function App() {
   }, []);
 
   function getProducts() {
-    setProductPromise({ pending: true, data: null, error: false });
+    setProductsPromise({
+      loading: true,
+      data: productsPromise.data,
+      error: false,
+    });
 
     fetch("http://localhost:3000/products")
       .then((res) => res.json())
       .then((data) => {
         console.log("Product data reeceived:", data);
         setShowCreateModal(false);
-        setProductPromise({ data });
+        setProductsPromise({ data, loading: false, error: false });
       })
       .catch((err) => {
         console.error("Error creating product:", err);
-        setProductPromise({ pending: false, data: null, error: err });
+        setProductsPromise({ loading: false, data: null, error: err });
       });
   }
 
   // POST API CALL TO CREATE NEW PRODUCT
 
   function createNewProduct() {
-    setCreatePromise({ pending: true, data: null, error: false });
+    setCreatePromise({ loading: true, data: null, error: false });
 
     fetch("http://localhost:3000/products", {
       method: "POST",
@@ -69,12 +75,37 @@ function App() {
       .then((data) => {
         console.log("New product created:", data);
         setShowCreateModal(false);
-        setCreatePromise({ pending: false, data: data, error: false });
-        getProducts();
+        setCreatePromise({ loading: false, data: data, error: false });
+        getProducts(); // Refresh table as soon after Post call completion
       })
       .catch((err) => {
         console.error("Error creating product:", err);
-        setCreatePromise({ pending: false, data: null, error: err });
+        setCreatePromise({ loading: false, data: null, error: err });
+      });
+  }
+
+  // Edit/Update API CALL
+
+  function updateProduct() {
+    setUpdatePromise({ loading: true, data: null, error: false });
+
+    fetch("http://localhost:3000/products/:id", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(activeData),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("Product Updated:", data);
+        setShowCreateModal(false);
+        setCreatePromise({ loading: false, data: data, error: false });
+        getProducts(); // Refresh table as soon after Post call completion
+      })
+      .catch((err) => {
+        console.error("Error creating product:", err);
+        setCreatePromise({ loading: false, data: null, error: err });
       });
   }
 
@@ -97,9 +128,16 @@ function App() {
       <div className="flex flex-col items-center justify-center w-full">
         {/* NAVBAR */}
         <Navbar onNewClick={() => setShowCreateModal(true)} />
+        <div className="h-24 w-full"></div>
+
+        {productsPromise.loading ? <BarLoader width={"80%"} /> : null}
+
         <ProductTable
           onNotesClick={() => setShowNotesModal(true)}
-          onEditClick={() => setShowEditModal(true)}
+          onEditClick={(product) => {
+            setactiveProduct(product);
+            setShowEditModal(true);
+          }}
           onDeleteClick={deleteProduct}
           products={productsPromise?.data || []}
         />
@@ -116,30 +154,36 @@ function App() {
               setCreateData(obj);
             }}
           />
-          {createPromise.pending && <span>Loading...</span>}
-          <div className="flex justify-end mt-6 gap-2">
-            <button
-              onClick={() => setShowCreateModal(false)}
-              className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
-            >
-              Close
-            </button>
-            <button
-              onClick={() => {
-                createNewProduct();
-                getProducts();
-              }}
-              className="px-4 py-2 bg-gray-300 rounded hover:bg-blue-600"
-            >
-              {createPromise.pending ? (
-                <ClipLoader color={"blue"} size={20} />
-              ) : (
-                "Submit"
-              )}
-            </button>
-            {createPromise.error ? (
-              <p className="error">Soemthing went wrong .. </p>
-            ) : null}
+
+          <div className="flex justify-between items-center mt-6 gap-2">
+            <div>
+              {createPromise.error ? (
+                <span className="error">Soemthing went wrong .. </span>
+              ) : null}
+              {createPromise.loading && <span>Processing...</span>}
+            </div>
+
+            <div className="flex gap-2">
+              <button
+                onClick={() => setShowCreateModal(false)}
+                className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+              >
+                Close
+              </button>
+              <button
+                onClick={() => {
+                  createNewProduct();
+                  getProducts();
+                }}
+                className="px-4 py-2 rounded text-white bg-blue-700 hover:bg-blue-800 hover w-20"
+              >
+                {createPromise.loading ? (
+                  <ClipLoader color={"white"} size={20} />
+                ) : (
+                  "Submit"
+                )}
+              </button>
+            </div>
           </div>
         </Modal>
 
@@ -149,17 +193,20 @@ function App() {
           onClose={() => setShowEditModal(false)}
           heading="Update the Product"
         >
-          <ProductForm />
+          <ProductForm
+            value={activeProduct}
+            onChange={(obj) => setactiveProduct(obj)} ////////
+          />
 
           <div className="flex justify-end mt-6 gap-2">
             <button
-              onClick={() => setShowCreateModal(false)}
+              onClick={() => setShowEditModal(false)}
               className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
             >
               Close
             </button>
             <button
-              onClick={updateProduct}
+              onClick={activeProduct}
               className="px-4 py-2 bg-gray-300 rounded hover:bg-blue-600"
             >
               Submit

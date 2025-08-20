@@ -20,6 +20,7 @@ function ProductForm(props) {
   useEffect(() => {
     if (props.onChange) {
       props.onChange({
+        id: props.value?.id,
         productName,
         productLink,
         productQuantity,
@@ -36,7 +37,7 @@ function ProductForm(props) {
           <label className="text-sm">Product Name</label>
           <input
             type="text"
-            value={props.value?.productName}
+            value={productName}
             onChange={(e) => setProductName(e.target.value)}
             placeholder="Enter product name"
             className="w-full px-4 py-2 border rounded-md"
@@ -47,7 +48,7 @@ function ProductForm(props) {
           <label className="text-sm">Product Link</label>
           <input
             type="text"
-            value={props.value?.productLink}
+            value={productLink}
             onChange={(e) => setProductLink(e.target.value)}
             placeholder="Enter product link"
             className="w-full px-4 py-2 border rounded-md"
@@ -58,7 +59,7 @@ function ProductForm(props) {
           <label className="text-sm">Quantity</label>
           <input
             type="number"
-            value={props.value?.productQuantity}
+            value={productQuantity}
             onChange={(e) => setProductQuantity(e.target.value)}
             min="1"
             placeholder="Enter quantity"
@@ -80,7 +81,7 @@ function ProductForm(props) {
           <label className="text-sm">Status</label>
           <select
             className="w-full px-4 py-2 border rounded-md pr-10"
-            value={props.value?.orderStatus}
+            value={orderStatus}
             onChange={(e) => setOrderStatus(e.target.value)}
           >
             <option value="Pending">Pending</option>

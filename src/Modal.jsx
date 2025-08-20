@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 const Modal = (props) => {
   return props.show ? (
-    <div className="fixed inset-0 flex items-center justify-center bg-black/50">
+    <div className="fixed inset-0 flex items-center justify-center bg-black/50 pt-12">
       <div className="bg-white min-w-4/5 sm:min-w-1/2 min-h-1/2 rounded-lg shadow-lg p-6">
         <h2 className="text-lg font-bold mb-4 text-black">{props.heading}</h2>
 
